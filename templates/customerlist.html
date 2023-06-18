@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer List{% endblock %}
+{% block h1 %}Customer List{% endblock %}
+
+    {% block content %}
+<style>
+
+#name-header.sorted {
+  background-image: url('/static/images/up.png');
+}
+
+#name-header.sorted.reverse {
+  background-image: url('/static/images/down.png');
+}
+</style>
+    <form method="POST" >
+        {{form.hidden_tag()}}
+            <div class="inventory">
+                <a  style="margin-right:20px;">{{ form.S_name.label }} {{ form.S_name(class="form-control", style="height:29px; width:240px;") }}</a>
+                <a style="margin-right:20px;">{{ form.S_address.label }} {{ form.S_address(class="form-control", style="height:29px; width:240px;") }}</a>
+                <a>{{form.Submit(class="btn btn-lg ") }}</a>
+            </div>
+    </form>
+
+
+
+<div style="padding: 15px; font-size: 18px;" >
+    <table border="1">
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th id="name-header" class="sorted"><a href="{{ url_for('customerlist', sort='name') }}" style="  text-decoration: none;">Name</a></th>
+          <th>Address</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in results %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><a id="{{item.cust_id}}" href="{{ url_for('customerlist', sort=item.cust_id) }}" style="text-decoration: none;">{{ item.name }}</a></td>
+            <td>{{ item.address }}</td>
+            <td>{{ item.contact }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+     <div style=" background-color: lightyellow; color:darkgreen; padding: 3px; border: 1px solid darkgreen; display: inline-block;">
+              <ul>{{note}}</ul>
+        </div>
+
+<script src="{{ url_for('static', filename='js/jquery-3.6.4.min.js') }}"></script>
+<script>
+  $.ajax({
+  url: '/customerlist',
+  data: {sort: col_name},
+  type: 'GET',
+  success: function(response) {
+    window.location.href = "/customerlist?sort=" + col_name;
+  },
+  error: function(error) {
+    console.log(error);
+  }
+});
+
+
+// Get the "Name" column header
+const nameHeader = document.querySelector('#name-header');
+
+// Add an event listener for when the header is clicked
+nameHeader.addEventListener('click', function() {
+  // Toggle the "sorted" class on the header
+  nameHeader.classList.toggle('sorted');
+});
+
+</script>
+
+
+{% endblock %}
+
+{%block footer%}
+{%endblock%}
+

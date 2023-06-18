@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory{% endblock %}
+{% block h1 %}Inventory{% endblock %}
+
+    {% block content %}
+<style>
+.icon-linkadd {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background-image: url('static/images/add_color.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.icon-linkminus {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background-image: url('static/images/minus_color.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
+    <form method="POST" >
+            <div style="margin-bottom:5px; " >
+                <a>Part Name: </a><input style="margin-right:20px; height:29px; width:240px;"  name="name">
+                <button type="submit" name="check" style="margin-right:20px; height:29px; width:100px;">Search</button>
+                <a href="{{url_for('p_form')}}" class="icon-linkadd" style="margin-left:458px; margin-top:10px;"></a> <a href="{{url_for('p_form')}}" style="font-size:20px;  font-weight: bold; margin-right:35px; padding:2px ;text-decoration:none; back-groundcolor:darkgreen; margin-top:15px;">Add Product</a>
+                <a href="{{url_for('p_form')}}" class="icon-linkminus"></a> <a href="{{url_for('delete')}}" style="font-size:20px;  font-weight: bold; margin-right:10px; padding:2px ;text-decoration:none; margin-top:15px;color:darkred">Edit Product</a>
+
+
+            </div>
+    </form>
+
+
+
+<div style="padding: 15px;">
+    <table border="1">
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th><a href="{{ url_for('inventory', sort='name') }}">Part Name</a></th>
+          <th>Qty avaliable</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in results %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{item.qty}}</td>
+            <td>{{ item.price }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+     <div style=" background-color: lightyellow; color:darkgreen; padding: 3px; border: 1px solid darkgreen; display: inline-block;">
+              <ul>{{note}}</ul>
+        </div>
+{% endblock %}
+
+{%block footer%}
+{%endblock%}

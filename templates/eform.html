@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}New Entry{% endblock %}
+
+{% block h1 %}Purchase Entry{% endblock %}
+
+{% block content %}
+<div class=" container div-bg" >
+  <div class="left-align">
+
+      <form method="POST" id="EntryForm" name="EntryForm"  >
+        {{form.hidden_tag()}}
+          <label style="font-size: 18px; margin-left:35px;">Select a Customer:</label> <br>
+          <div style="margin-left:35px; " >
+              <select id="Customer_name" style="font-size: 20px; width:300px; margin-right:10px;">
+                <option value="0">Select Customer</option>
+                {% block customer %}
+                    {% for elem in name_list %}
+                        <option value="{{elem.cust_id}}">{{elem}}</option>
+                    {% endfor %}
+                {% endblock %}
+              </select>
+              <a id="cust-address" > </a>
+          </div>
+      </form>
+
+
+      <form method="POST" id="EntryForm2" action="{{url_for('e_form')}}" style="color:navy" class="left-align" >
+        {{form.hidden_tag()}}
+
+                <div style="padding: 15px;">
+                    <table border="1">
+                      <thead>
+                        <tr>
+                            <th style="font-size: 24px; width:700px; font-weight: bold;">Parts</th>
+                            <th style="font-size: 24px; width:30px; font-weight: bold;">Qty</th>
+                            <th style="font-size: 24px; width:30px; font-weight: bold;">Price</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                          <tr>
+                              <td>
+                              {% block part %}
+                                  <select id="part" style="font-size: 20px; width:600px;" >
+                                    <option value="0">Select Product</option>
+                              {% for key in part_list %}
+                                    <option value="key">{{key}}</option>
+                              {% endfor %}
+                                  </select>
+                              {% endblock %}
+                              </td>
+                              <td >{{ form.Qty(class="form-control form-control-lg", style="font-size: 20px; width:80px;") }}</td>
+                              <td ><input style="font-size:20px; min-height: 27px; width:100px; margin-bottom:2px;" id="price-input"; ></td>
+                          </tr>
+                       </tbody>
+                    </table>
+                        <input type="hidden" id="hiddenInpPart" name="Parts_purchased" value="">
+                        <input type="hidden" id="hiddenInpPrice" name="Price" value="">
+                        <input type="hidden" id="hiddenInpId" name="custid" value="">
+
+                </div>
+
+                <div style="margin-left:15px; margin-top:5px;" >
+                  {{form.Submit(class="btn btn-lg ") }}
+                </div><br><br><br><br>
+{{error_note}}
+          {{LASTENTRY}}
+      </form>
+
+  </div>
+</div>
+
+
+<script>
+
+  let selectedValue;
+
+  entryForm = document.getElementById('EntryForm');
+
+  entryForm.addEventListener('change', function(e) {
+    e.preventDefault();
+    // Get the selected value from the dropdown_select_Element
+    const dropdown = document.getElementById('Customer_name');
+    selectedValue = dropdown.options[dropdown.selectedIndex].text;
+
+    // Update innerHTMl
+    document.getElementById('cust-address').innerHTML = selectedValue;
+    // Set value of HiddenInpId
+
+    const hiddenInp_id = document.getElementById("hiddenInpId");
+    hiddenInp_id.value = dropdown.options[dropdown.selectedIndex].value
+    console.log(hiddenInp_id.value);
+  });
+
+    let selectedPart;
+    let selectedPrice;
+    const parts = {{ part_list | tojson }};
+
+    entryForm2 = document.getElementById('EntryForm2');
+
+    entryForm2.addEventListener('change', function(event) {
+    event.preventDefault();
+
+    // Updating hidden input Part
+    const Part_dropdown = document.getElementById('part');
+    selectedPart = Part_dropdown.options[Part_dropdown.selectedIndex].text;
+    const hiddenInp_part = document.getElementById('hiddenInpPart');
+    hiddenInp_part.value = selectedPart;
+
+    // Updating hidden input Price
+    const hiddenInp_price = document.getElementById('hiddenInpPrice');
+    hiddenInp_price.value = parts[selectedPart];
+    document.getElementById('price-input').value = parts[selectedPart];
+
+    console.log(hiddenInp_part.value);
+    console.log(hiddenInp_price.value);
+
+  });
+
+
+</script>
+
+{% endblock %}
