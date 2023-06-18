@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'malwalubes'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DD34213C9730405392369F5CB186F5CE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A2E85553510D4E76B427C6736A812926 }}
